@@ -11,9 +11,11 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.BooleanSupplier;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnTest;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (vID)
         {
             case R.id.btnTest:
-                testTimer();
+                testScheduler();
                 break;
                 default:
                     break;
@@ -149,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                 );
     }
+    //endregion
 
     //region 测试timer
     // timer()创建一个在给定的时间段之后返回一个特殊值的Observable
@@ -161,6 +164,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void accept(Long aLong) throws Exception {
                                 LogV(aLong.toString());
+                            }
+                        }
+                );
+    }
+    //endregion
+
+    //region 测试scheduler
+    private void testScheduler()
+    {
+        Observable.just("aaa","bbb")
+                .observeOn(Schedulers.newThread())
+                .map(new Function<String, String>() {
+                    @Override
+                    public String apply(@NonNull String s)
+                    {
+                        return s.toUpperCase();
+                    }
+                })
+                .subscribeOn(Schedulers.single())
+                .subscribe(
+                        new Consumer<String>() {
+                            @Override
+                            public void accept(String s) throws Exception {
+                                LogV(s);
                             }
                         }
                 );
