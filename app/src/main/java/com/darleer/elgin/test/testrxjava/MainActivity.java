@@ -10,7 +10,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
+import io.reactivex.Scheduler;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.BooleanSupplier;
 import io.reactivex.functions.Consumer;
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (vID)
         {
             case R.id.btnTest:
-                testScheduler();
+                testSubscribeAndObserveOn();
                 break;
                 default:
                     break;
@@ -171,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //endregion
 
     //region 测试scheduler
+    // 在observeOn中开启新线程，用来转大写
     private void testScheduler()
     {
         Observable.just("aaa","bbb")
@@ -191,5 +195,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }
                 );
+    }
+    //endregion
+
+    //region 测试 单独使用subscribeOn
+    private void testSubscribeOn() {
+        Observable.create(
+                new ObservableOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<String> emitter)
+                    {
+                        emitter.onNext("Hello");
+                        emitter.onNext("World");
+                    }
+                }
+        ).subscribeOn(Schedulers.newThread())
+                .subscribe(
+                        new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception
+                        {
+                            LogV(s);
+                        }
+                });
+    }
+    //endregion
+
+    //region 多次调用subscribeOn和observeOn
+    private void testSubscribeAndObserveOn()
+    {
+        Observable.just("Hello World")
+                .subscribeOn(Schedulers.single())
+                .map(new Function<String, String>() {
+                    @Override
+                    public String apply(@NonNull String s)
+                    {
+                        s = s.toLowerCase();
+                        return s;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .map(new Function<String, String>() {
+                    @Override
+                    public String apply(String s)
+                    {
+                        s = s + "tony.";
+                        return s;
+                    }
+                })
+                .subscribeOn(Schedulers.computation())
+                .map(new Function<String, String>() {
+                    @Override
+                    public String apply(String s)
+                    {
+                        s = s + "it is a test";
+                        return s;
+                    }
+                })
+                .observeOn(Schedulers.newThread())
+                .subscribe(
+                        new Consumer<String>() {
+                            @Override
+                            public void accept(@NonNull String s) {
+                                LogV(s);
+                            }
+                        });
     }
 }
