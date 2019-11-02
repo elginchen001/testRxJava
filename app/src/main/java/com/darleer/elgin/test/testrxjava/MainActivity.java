@@ -15,11 +15,14 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BooleanSupplier;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.observables.GroupedObservable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (vID)
         {
             case R.id.btnTest:
-                testFlatMap();
+                testGroupBy();
                 break;
                 default:
                     break;
@@ -50,6 +53,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         Log.v("TAG",info);
     }
+
+    //region 测试groupBy
+    /**
+     * 发射一组数据，然后分偶奇组两个序列发射。
+     * 分组后的序列已经转为GroupedObservable类型（本身也是Observable)
+     * 为了获得GroupedObservable对象的值，又再次订阅了一次
+     */
+    private void testGroupBy()
+    {
+        Observable.range(1,10)
+                .groupBy(new Function<Integer, String>() {
+                    @Override
+                    public String apply(Integer integer) throws Exception {
+                        return (integer%2==0)?"偶数组":"奇数组";
+                    }
+                })
+                .subscribe(
+                        new Consumer<GroupedObservable<String, Integer>>() {
+                            @Override
+                            public void accept(final GroupedObservable<String, Integer> stringIntegerGroupedObservable) throws Exception {
+                                stringIntegerGroupedObservable.subscribe(
+                                        new Consumer<Integer>() {
+                                            @Override
+                                            public void accept(Integer integer) throws Exception {
+                                                String value = integer.toString();
+                                                String info = stringIntegerGroupedObservable.getKey();
+                                                LogV(info+" is "+value);
+                                            }
+                                        }
+                                );
+                            }
+                        }
+                );
+    }
+    //endreigon
 
     //region 测试map()和flatMap()方法
     private User initUserData()
