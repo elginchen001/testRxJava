@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return user;
     }
 
+    /**
+     * 将User.AddressList转为List<User.Address>然后返回</>
+     */
     private void testMap()
     {
         User user = initUserData();
@@ -85,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
+    /**
+     * 使用fromIterable()逐次发射list中的数据，然后flatMap合并这些Observable发射的数据，
+     * 最后将合并后的结果当做它自己的数据序列发射。
+     */
     private void testFlatMap()
     {
         User user = initUserData();
