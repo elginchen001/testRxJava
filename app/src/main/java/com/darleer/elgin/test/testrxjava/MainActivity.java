@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (vID)
         {
             case R.id.btnTest:
-                testSubscribeAndObserveOn();
+                testFlatMap();
                 break;
                 default:
                     break;
@@ -48,6 +50,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         Log.v("TAG",info);
     }
+
+    //region 测试map()和flatMap()方法
+    private User initUserData()
+    {
+        User user = new User();
+        User.Address address1 = new User.Address("chang jiang Load","Hefei");
+        User.Address address2 = new User.Address("huai ning Load","beijing");
+        user.AddressList = new ArrayList<>();
+        user.AddressList.add(address1);
+        user.AddressList.add(address2);
+        return user;
+    }
+
+    private void testMap()
+    {
+        User user = initUserData();
+        Observable.just(user)
+                .map(new Function<User, List<User.Address>>() {
+                    @Override
+                    public List<User.Address> apply(User user)
+                    {
+                        return user.AddressList;
+                    }
+                })
+                .subscribe(new Consumer<List<User.Address>>() {
+                    @Override
+                    public void accept(List<User.Address> addresses) throws Exception {
+                        for( User.Address addr :addresses)
+                        {
+                            LogV(addr.street);
+                        }
+                    }
+                });
+    }
+
+    private void testFlatMap()
+    {
+        User user = initUserData();
+        Observable.just(user)
+                .flatMap(new Function<User, ObservableSource<User.Address>>() {
+                    @Override
+                    public ObservableSource<User.Address> apply(User user) throws Exception {
+                        return Observable.fromIterable(user.AddressList);
+                    }
+                })
+                .subscribe(new Consumer<User.Address>() {
+                    @Override
+                    public void accept(User.Address address) throws Exception {
+                        LogV(address.street);
+                    }
+                });
+    }
+    //endregion
 
     //region 测试repeatWhen操作符
     private  void doRxJavaTest()
@@ -224,22 +279,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //region 多次调用subscribeOn和observeOn
     private void testSubscribeAndObserveOn()
     {
-        Observable.just("Hello World")
+        Observable.just("1","2","3","4","5")
                 .subscribeOn(Schedulers.single())
                 .map(new Function<String, String>() {
                     @Override
                     public String apply(@NonNull String s)
                     {
                         s = s.toLowerCase();
+                        s = s+":"+Thread.currentThread().getName();
+                        LogV(s);
                         return s;
                     }
                 })
+                .skip(1)
                 .observeOn(Schedulers.io())
                 .map(new Function<String, String>() {
                     @Override
                     public String apply(String s)
                     {
-                        s = s + "tony.";
+                        s = s+":"+Thread.currentThread().getName();
+                        LogV(s);
                         return s;
                     }
                 })
@@ -248,7 +307,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public String apply(String s)
                     {
-                        s = s + "it is a test";
+                        s = s+":"+Thread.currentThread().getName();
+                        LogV(s);
                         return s;
                     }
                 })
@@ -261,4 +321,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         });
     }
+    //endregion
 }
