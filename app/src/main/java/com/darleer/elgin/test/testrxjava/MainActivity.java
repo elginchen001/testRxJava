@@ -18,12 +18,14 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BooleanSupplier;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observables.GroupedObservable;
 import io.reactivex.schedulers.Schedulers;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnTest;
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (vID)
         {
             case R.id.btnTest:
-                testGroupBy();
+                testSchedulerLife();
                 break;
                 default:
                     break;
@@ -54,7 +56,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.v("TAG",info);
     }
 
-    //region 测试groupBy
+    private void testSchedulerLife()
+    {
+                Observable.range(1,5)
+                .map(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer number)
+                    {
+                        LogV("\n"+Thread.currentThread().getName());
+                        return number * 10;
+                    }
+                })
+                .subscribe(
+                        new Observer<Integer>()
+                        {
+                            @Override
+                            public void onNext(Integer integer) {
+
+                            }
+
+                            @Override
+                            public void onComplete()
+                            {}
+
+                            @Override
+                            public void onError(Throwable throwable)
+                            {
+
+                            }
+
+                            @Override
+                            public void onSubscribe(Disposable disposable1)
+                            {}
+                        }
+                );
+    }
+
+    //region 测试buffer
+    /**
+     * buffer
+     * 1,2,3,4
+     * 5,6,7,8
+     * 9,10
+     */
+    private void testBuffer()
+    {
+        Observable.range(1,10)
+                .buffer(4)
+                .subscribe(new Consumer<List<Integer>>() {
+                    @Override
+                    public void accept(List<Integer> integer) throws Exception {
+                        LogV(integer.toString());
+                    }
+                });
+    }
+    //endregion
+
+    //region  测试groupBy
     /**
      * 发射一组数据，然后分偶奇组两个序列发射。
      * 分组后的序列已经转为GroupedObservable类型（本身也是Observable)
@@ -87,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                 );
     }
-    //endreigon
+    //endregion
 
     //region 测试map()和flatMap()方法
     private User initUserData()
