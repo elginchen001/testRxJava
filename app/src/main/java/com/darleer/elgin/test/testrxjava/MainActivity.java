@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (vID)
         {
             case R.id.btnTest:
-                testSchedulerLife();
+                testParallelStream();
                 break;
                 default:
                     break;
@@ -56,6 +56,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.v("TAG",info);
     }
 
+    //region 测试ParallelStream并行操作
+    private void testParallelStream()
+    {
+        List<Integer> numbers = new ArrayList();
+        for(Integer i=1;i<=20;i++)
+            numbers.add(i);
+        numbers.parallelStream()
+                .map(new java.util.function.Function<Integer, String>() {
+                    @Override
+                    public String apply(Integer integer)
+                    {
+                        return integer.toString();
+                    }
+                })
+                .forEach(new java.util.function.Consumer<String>() {
+                    @Override
+                    public void accept(String s) {
+                        LogV("s:"+s+"; Thread name is "+Thread.currentThread().getName());
+                    }
+                });
+    }
+    //endregion
+
+    //region 测试SchedulerLife（失败）
     private void testSchedulerLife()
     {
                 Observable.range(1,5)
@@ -91,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                 );
     }
+    //endregion
 
     //region 测试buffer
     /**
