@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //region 测试RxBinding
     private void testRxBinding()
     {
+        Observable obervable = RxView.clicks(btnTest);
 
     }
     //endregion
