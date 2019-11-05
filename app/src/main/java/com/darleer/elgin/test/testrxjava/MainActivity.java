@@ -26,6 +26,9 @@ import io.reactivex.functions.Function;
 import io.reactivex.observables.GroupedObservable;
 import io.reactivex.schedulers.Schedulers;
 import rx.android.schedulers.AndroidSchedulers;
+import com.jakewharton.rxbinding2.view.RxView;
+
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnTest;
@@ -55,6 +58,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         Log.v("TAG",info);
     }
+
+    //region 测试RxBinding
+    private void testRxBinding()
+    {
+        RxView.clicks(btnTest)
+            .subscribe(
+
+            );
+    }
+    //endregion
 
     //region 测试ParallelStream并行操作
     private void testParallelStream()
