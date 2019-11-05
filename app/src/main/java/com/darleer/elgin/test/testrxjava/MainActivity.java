@@ -62,9 +62,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //region 测试RxBinding
     private void testRxBinding()
     {
+        RxPermissions
         RxView.clicks(btnTest)
             .subscribe(
+                new Consumer<Object>()
+                {
+                    @Override
+                    public void accept(Object object)
+                    {
 
+                    }
+                }
             );
     }
     //endregion
