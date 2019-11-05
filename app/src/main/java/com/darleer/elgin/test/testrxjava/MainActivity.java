@@ -70,11 +70,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         return integer.toString();
                     }
                 })
-                .forEach(new java.util.function.Consumer<String>() {
-                    @Override
-                    public void accept(String s) {
-                        LogV("s:"+s+"; Thread name is "+Thread.currentThread().getName());
-                    }
+                .forEach(
+//                        new java.util.function.Consumer<String>() {
+//                            @Override
+//                            public void accept(String s) {
+//                            LogV("s:"+s+"; Thread name is "+Thread.currentThread().getName());
+//                        }
+                        (String s)->{
+                                LogV("s:"+s+" Thread name is "+Thread.currentThread().getName());
+
                 });
     }
     //endregion
