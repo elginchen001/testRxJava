@@ -1,5 +1,6 @@
-package com.darleer.elgin.test.testrxjava;
+package com.darleer.elgin.test.testrxjava.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.darleer.elgin.test.testrxjava.R;
+import com.darleer.elgin.test.testrxjava.User;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -37,7 +41,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnTest;
+    Button btnTest,btnPm25;
     ImageView imageBack;
 
     @Override
@@ -45,8 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnTest = findViewById(R.id.btnTest);
+        btnPm25 = findViewById(R.id.btnPm25);
         imageBack = findViewById(R.id.imageBack);
         btnTest.setOnClickListener(this);
+        btnPm25.setOnClickListener(this);
     }
 
     @Override
@@ -57,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnTest:
                 testRxAndroid();
                 break;
+            case R.id.btnPm25:
+                startActivity( new Intent(this,PmActivity.class));
                 default:
                     break;
         }
@@ -68,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //region 测试RxAndroid
-
     /**
      * 使用Rx技术获取网络图片
      *

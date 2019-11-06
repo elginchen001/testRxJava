@@ -1,6 +1,7 @@
 package com.darleer.elgin.test.testrxjava.retrofit;
 
 import com.darleer.elgin.test.testrxjava.api.APIService;
+import com.safframework.http.interceptor.LoggingInterceptor;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.LoggingPermission;
@@ -20,6 +21,14 @@ public class RetrofitManager {
             builder.writeTimeout(30*1000, TimeUnit.MILLISECONDS);
             builder.writeTimeout(20*1000, TimeUnit.MILLISECONDS);
             builder.connectTimeout(15*1000,TimeUnit.MILLISECONDS);
+
+            LoggingInterceptor loggingInterceptor = new LoggingInterceptor.Builder()
+                    .loggable(true)
+                    .request()
+                    .requestTag("Request")
+                    .response()
+                    .requestTag("Response")
+                    .build();
 
             OkHttpClient okHttpClient = builder.build();
             mRetrofit = new Retrofit.Builder()

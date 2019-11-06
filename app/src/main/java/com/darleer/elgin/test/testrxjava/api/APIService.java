@@ -10,6 +10,7 @@ import io.reactivex.Maybe;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+
 public interface APIService {
     String API_BASE_SERVER_URL = "http://www.pm25.in/";
 
