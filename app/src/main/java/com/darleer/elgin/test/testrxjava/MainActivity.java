@@ -1,5 +1,6 @@
 package com.darleer.elgin.test.testrxjava;
 
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -25,10 +27,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observables.GroupedObservable;
 import io.reactivex.schedulers.Schedulers;
-import rx.android.schedulers.AndroidSchedulers;
-import com.jakewharton.rxbinding2.view.RxView;
-
-
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnTest;
@@ -47,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (vID)
         {
             case R.id.btnTest:
-                testRxBinding();
+                testParallelStream();
                 break;
                 default:
                     break;
@@ -59,13 +57,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.v("TAG",info);
     }
 
-    //region 测试RxBinding
-    private void testRxBinding()
+    private void testRxAndroid()
     {
-        Observable obervable = RxView.clicks(btnTest);
+        Observable.create(new ObservableOnSubscribe<Bitmap>() {
+            @Override
+            public void subscribe(ObservableEmitter<Bitmap> emitter)
+            {
+                emitter.onNext(getBitmap());
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Bitmap>() {
+                    @Override
+                    public void accept(Bitmap bitmap) throws Exception {
+                        if(bitmap!=null)
+                        {
+
+                        }
+                    }
+                });
 
     }
-    //endregion
+
+    private Bitmap getBitmap()
+    {
+        return null;
+    }
 
     //region 测试ParallelStream并行操作
     private void testParallelStream()
