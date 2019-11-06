@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+import java.util.function.LongBinaryOperator;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -66,13 +67,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.v("TAG",info);
     }
 
+    //region 测试RxAndroid
+
+    /**
+     * 使用Rx技术获取网络图片
+     *
+     */
     private void testRxAndroid()
     {
+        if(btnTest==null&&imageBack==null)
+        {
+            LogV("控件为空");
+            return;
+        }
         Observable.create(new ObservableOnSubscribe<Bitmap>() {
             @Override
             public void subscribe(ObservableEmitter<Bitmap> emitter)
             {
-                emitter.onNext(getBitmap());
+                Bitmap bitmap = getBitmap();
+                LogV("Thread is on:"+Thread.currentThread().getName());
+                if(bitmap==null)
+                    LogV("获取图片失败");
+                else
+                    LogV("获取图片成功");
+                emitter.onNext(bitmap);
             }
         })
                 .subscribeOn(Schedulers.io())
@@ -83,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if(bitmap!=null)
                         {
                             imageBack.setImageBitmap(bitmap);
+                            LogV("Thread is on:"+Thread.currentThread().getName());
                         }
                     }
                 });
@@ -94,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         HttpURLConnection con;
         try
         {
-            URL url = new URL("https://bing.ioliu.cn/photo/CrocusSativus_ZH-CN3143423131?force=home_1");
+            URL url = new URL("https://c-ssl.duitang.com/uploads/item/201604/09/20160409172820_LKBvt.thumb.700_0.jpeg");
             con = (HttpURLConnection)url.openConnection();
             con.setConnectTimeout(2000);
             con.connect();
@@ -113,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return null;
     }
+    //endregion
 
     //region 测试ParallelStream并行操作
     private void testParallelStream()

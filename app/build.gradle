@@ -34,5 +34,11 @@ dependencies {
     }
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:retrofit-adapters:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.safframework.log:saf-logginginterceptor:1.2.0'
+    implementation 'com.alibaba:fastjson:1.2.62'
+    implementation 'org.ligboy.retrofit2:converter-fastjson-android:2.1.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 }
