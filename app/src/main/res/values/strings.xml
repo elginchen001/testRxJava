@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">testRxJava</string>
     <string name="btnTest">测试</string>
+    <string name="imagecontentDescription">TODO</string>
 </resources>
