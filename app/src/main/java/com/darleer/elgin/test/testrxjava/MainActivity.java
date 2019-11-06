@@ -1,12 +1,18 @@
 package com.darleer.elgin.test.testrxjava;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -29,13 +35,16 @@ import io.reactivex.observables.GroupedObservable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
     Button btnTest;
+    ImageView imageBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnTest = findViewById(R.id.btnTest);
+        imageBack = findViewById(R.id.imageBack);
         btnTest.setOnClickListener(this);
     }
 
@@ -45,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (vID)
         {
             case R.id.btnTest:
-                testParallelStream();
+                testRxAndroid();
                 break;
                 default:
                     break;
@@ -73,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void accept(Bitmap bitmap) throws Exception {
                         if(bitmap!=null)
                         {
-
+                            imageBack.setImageBitmap(bitmap);
                         }
                     }
                 });
@@ -82,6 +91,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Bitmap getBitmap()
     {
+        HttpURLConnection con;
+        try
+        {
+            URL url = new URL("https://bing.ioliu.cn/photo/CrocusSativus_ZH-CN3143423131?force=home_1");
+            con = (HttpURLConnection)url.openConnection();
+            con.setConnectTimeout(2000);
+            con.connect();
+            if(con.getResponseCode()==200) {
+                return BitmapFactory.decodeStream(con.getInputStream());
+            }
+
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         return null;
     }
 
