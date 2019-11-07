@@ -3,7 +3,6 @@ package com.darleer.elgin.test.testrxjava.api;
 import com.darleer.elgin.test.testrxjava.model.PM10Model;
 import com.darleer.elgin.test.testrxjava.model.PM25Model;
 import com.darleer.elgin.test.testrxjava.model.SO2Model;
-import com.darleer.elgin.test.testrxjava.model.StationObject;
 
 import java.util.List;
 

@@ -6,9 +6,14 @@ import android.view.View;
 import android.widget.Button;
 
 import com.darleer.elgin.test.testrxjava.R;
+import com.darleer.elgin.test.testrxjava.api.APIService;
+import com.darleer.elgin.test.testrxjava.model.CityModel;
+import com.darleer.elgin.test.testrxjava.retrofit.RetrofitManager;
+import com.safframework.utils.RxJavaUtils;
 
 public class CityActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private String CITY_ID = "hefei";
     private Button btnRefresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,8 @@ public class CityActivity extends AppCompatActivity implements View.OnClickListe
 
     private void getCityStations()
     {
-
+        APIService apiService = RetrofitManager.getRetrofit().create(APIService.class);
+        apiService.getCityStations(CITY_ID)
+                .compose(RxJavaUtils.<CityModel>maybeToMain())
     }
 }
