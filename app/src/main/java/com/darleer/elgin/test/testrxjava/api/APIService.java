@@ -27,4 +27,7 @@ public interface APIService {
 
     @GET("api/querys/station_names.json")
     Maybe<List<CityModel>> getCities(@Query("city") String cityID);
+
+    @GET("api/querys/station_names.json")
+    Observable<CityModel> getCity(@Query("city") String cityID,@Query("token") String token);
 }

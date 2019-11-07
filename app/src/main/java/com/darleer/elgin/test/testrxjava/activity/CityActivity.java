@@ -18,15 +18,20 @@ import com.safframework.tony.common.utils.Preconditions;
 import com.safframework.utils.RxJavaUtils;
 
 import java.util.List;
+import java.util.Observable;
 
 import io.reactivex.Maybe;
 import io.reactivex.MaybeSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class CityActivity extends AppCompatActivity implements View.OnClickListener{
 
     private String CITY_ID = "hefei";
+    private String TOKEN = "5j1znBVAsnSf5xQyNQyq";
+
     private Button btnRefresh;
     private TextView txtCityName;
     private ListView lvStation;
@@ -57,22 +62,10 @@ public class CityActivity extends AppCompatActivity implements View.OnClickListe
     private void getCityStations()
     {
         APIService apiService = RetrofitManager.getRetrofit().create(APIService.class);
-        apiService.getCities(CITY_ID)
-                .compose(RxJavaUtils.<List<CityModel>>maybeToMain())
-                .flatMap(
-                        new Function<List<CityModel>, MaybeSource<CityModel>>() {
-                            @Override
-                            public MaybeSource<CityModel> apply(List<CityModel> cityModels) throws Exception {
-                                for(CityModel model:cityModels)
-                                {
-                                    if(model.getCity().equals(CITY_ID))
-                                        return Maybe.just(model);
-                                }
-                                return null;
-                            }
-                        }
-                )
-                .subscribe(
+        io.reactivex.Observable<CityModel> observable = apiService.getCity(CITY_ID,TOKEN).subscribeOn(Schedulers.io());
+                observable
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
                         new Consumer<CityModel>() {
                             @Override
                             public void accept(CityModel model) {
