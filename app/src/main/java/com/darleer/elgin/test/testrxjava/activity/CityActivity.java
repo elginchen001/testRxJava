@@ -57,7 +57,7 @@ public class CityActivity extends AppCompatActivity implements View.OnClickListe
             listViewItemID = R.layout.listview_citystation_item;
             stationData.add("1");
             stationData.add("2");
-            stationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,stationData);
+            stationAdapter = new ArrayAdapter<String>(this, listViewItemID,stationData);
             lvStation.setAdapter(stationAdapter);
         }
         catch (Exception e)
