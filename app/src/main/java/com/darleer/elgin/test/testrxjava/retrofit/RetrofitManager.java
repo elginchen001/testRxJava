@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.fastjson.FastJsonConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitManager {
     private static Retrofit mRetrofit;
@@ -34,6 +35,7 @@ public class RetrofitManager {
             mRetrofit = new Retrofit.Builder()
                     .baseUrl(APIService.API_BASE_SERVER_URL)
                     .addConverterFactory(FastJsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(okHttpClient)
                     .build();

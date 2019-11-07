@@ -62,11 +62,10 @@ public class PmActivity extends AppCompatActivity {
 
                         for (PM25Model model:pm25Models){
 
-                            if ("南门".equals(model.position_name)) {
+                            if ("长江中路".equals(model.position_name)) {
                                 return Maybe.just(model);
                             }
                         }
-
                         return null;
                     }
                 })
@@ -78,6 +77,11 @@ public class PmActivity extends AppCompatActivity {
                             txtQuality.setText("空气质量指数：" + model.quality);
                             txtPm25.setText("PM2.5 1小时内平均：" + model.pm2_5);
                             txtPm25With24h.setText("PM2.5 24小时滑动平均：" + model.pm2_5_24h);
+                        }
+                        {
+                            txtQuality.setText("空气质量指数：null");
+                            txtPm25.setText("PM2.5 1小时内平均：null");
+                            txtPm25With24h.setText("PM2.5 24小时滑动平均：null");
                         }
                     }
                 }, new Consumer<Throwable>() {
