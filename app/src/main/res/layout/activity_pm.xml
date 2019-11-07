@@ -1,51 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.PmActivity">
+    android:orientation="vertical">
 
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineStart"
+    <TextView
+        android:id="@+id/txtAll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="40dp" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="40dp" />
+        android:text="TextView" />
 
     <TextView
         android:id="@+id/txtQuality"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/txtPm25"
-        />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/txtPm25"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="sss"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="txtQuality" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/txtPm25With24h"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintTop_toBottomOf="txtPm25" />
-
-</android.support.constraint.ConstraintLayout>
+        android:layout_height="wrap_content" />
+    
+</LinearLayout>
