@@ -3,10 +3,12 @@ package com.darleer.elgin.test.testrxjava.api;
 import com.darleer.elgin.test.testrxjava.model.PM10Model;
 import com.darleer.elgin.test.testrxjava.model.PM25Model;
 import com.darleer.elgin.test.testrxjava.model.SO2Model;
+import com.darleer.elgin.test.testrxjava.model.StationObject;
 
 import java.util.List;
 
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -22,4 +24,7 @@ public interface APIService {
 
     @GET("api/querys/so2.json")
     Maybe<List<SO2Model>> so2(@Query("city") String cityId, @Query("token") String token);
+
+    @GET("api/querys/station_names.json")
+    Observable<List<StationObject>> getCityStations(@Query("city") String cityID);
 }

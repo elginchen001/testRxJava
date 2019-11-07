@@ -2,4 +2,5 @@
     <string name="app_name">testRxJava</string>
     <string name="btnTest">测试</string>
     <string name="imagecontentDescription">TODO</string>
+    <string name="btn_refresh_city">刷新</string>
 </resources>
