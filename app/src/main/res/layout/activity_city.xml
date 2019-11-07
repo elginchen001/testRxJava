@@ -9,6 +9,18 @@
         android:id="@+id/btnRefresh"
         android:text="@string/btn_refresh_city"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/txtCityName"
+        android:text="城市"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <ListView
+        android:id="@+id/lvStation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
 
 </LinearLayout>

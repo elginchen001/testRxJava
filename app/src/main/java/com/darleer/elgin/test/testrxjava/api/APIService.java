@@ -1,5 +1,6 @@
 package com.darleer.elgin.test.testrxjava.api;
 
+import com.darleer.elgin.test.testrxjava.model.CityModel;
 import com.darleer.elgin.test.testrxjava.model.PM10Model;
 import com.darleer.elgin.test.testrxjava.model.PM25Model;
 import com.darleer.elgin.test.testrxjava.model.SO2Model;
@@ -25,5 +26,5 @@ public interface APIService {
     Maybe<List<SO2Model>> so2(@Query("city") String cityId, @Query("token") String token);
 
     @GET("api/querys/station_names.json")
-    Observable<List<StationObject>> getCityStations(@Query("city") String cityID);
+    Maybe<List<CityModel>> getCities(@Query("city") String cityID);
 }
