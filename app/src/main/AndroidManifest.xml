@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.PmActivity"></activity>
+        <activity android:name=".activity.PmActivity" />
+        <activity android:name=".activity.CityActivity"></activity>
     </application>
 
 </manifest>
