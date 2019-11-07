@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 testRxAndroid();
                 break;
             case R.id.btnPm25:
-                startActivity( new Intent(this,CityActivity.class));
+                startActivity( new Intent(this,PmActivity.class));
                 default:
                     break;
         }

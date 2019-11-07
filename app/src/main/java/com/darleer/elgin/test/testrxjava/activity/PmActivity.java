@@ -15,9 +15,11 @@ import java.util.List;
 
 import io.reactivex.Maybe;
 import io.reactivex.MaybeSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 
 public class PmActivity extends AppCompatActivity {
 
@@ -50,38 +52,40 @@ public class PmActivity extends AppCompatActivity {
                 .filter(new Predicate<List<PM25Model>>() {
                     @Override
                     public boolean test(List<PM25Model> pm25Models) throws Exception {
+
                         return com.safframework.tony.common.utils.Preconditions.isNotBlank(pm25Models);
                     }
                 })
                 .flatMap(new Function<List<PM25Model>, MaybeSource<PM25Model>>() {
                     @Override
                     public MaybeSource<PM25Model> apply(List<PM25Model> pm25Models) throws Exception {
-                        for(PM25Model pm25Model : pm25Models)
-                        {
-                            if("".equals(pm25Model.position_name))
-                            {
-                                return Maybe.just(pm25Model);
+
+                        for (PM25Model model:pm25Models){
+
+                            if ("南门".equals(model.position_name)) {
+                                return Maybe.just(model);
                             }
                         }
+
                         return null;
                     }
                 })
                 .subscribe(new Consumer<PM25Model>() {
-                               @Override
-                               public void accept(PM25Model pm25Model) throws Exception {
-                                   if (pm25Model != null) {
-                                       txtQuality.setText("空气质量指数：" + pm25Model.quality);
-                                       txtPm25.setText("PM2.5在1小时内的平均：" + pm25Model.pm2_5);
-                                       txtPm25With24h.setText("PM2.5在24小时滑动平均：" + pm25Model.pm2_5_24h);
-                                   }
-                               }
-                           }, new Consumer<Throwable>() {
-                               @Override
-                               public void accept(Throwable throwable) throws Exception {
-                                   System.out.println(throwable.getMessage());
-                               }
-                           }
-                );
+                    @Override
+                    public void accept(PM25Model model) throws Exception {
+
+                        if (model != null) {
+                            txtQuality.setText("空气质量指数：" + model.quality);
+                            txtPm25.setText("PM2.5 1小时内平均：" + model.pm2_5);
+                            txtPm25With24h.setText("PM2.5 24小时滑动平均：" + model.pm2_5_24h);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        System.out.println(throwable.getMessage());
+                    }
+                });
 
 
 
