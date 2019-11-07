@@ -17,6 +17,7 @@ import com.darleer.elgin.test.testrxjava.retrofit.RetrofitManager;
 import com.safframework.tony.common.utils.Preconditions;
 import com.safframework.utils.RxJavaUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
@@ -32,6 +33,10 @@ public class CityActivity extends AppCompatActivity implements View.OnClickListe
     private String CITY_ID = "hefei";
     private String TOKEN = "5j1znBVAsnSf5xQyNQyq";
 
+    private int listViewItemID;
+    private ArrayAdapter<String> stationAdapter;
+    private List<String> stationData = new ArrayList<String>();
+
     private Button btnRefresh;
     private TextView txtCityName;
     private ListView lvStation;
@@ -42,7 +47,23 @@ public class CityActivity extends AppCompatActivity implements View.OnClickListe
         btnRefresh = findViewById(R.id.btnRefresh);
         btnRefresh.setOnClickListener(this);
         txtCityName = findViewById(R.id.txtCityName);
-        lvStation = findViewById(R.id.lvStation);
+        lvStation = (ListView)findViewById(R.id.lvStation);
+        bindCityStation();
+    }
+
+    private void bindCityStation()
+    {
+        try {
+            listViewItemID = R.layout.listview_citystation_item;
+            stationData.add("1");
+            stationData.add("2");
+            stationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,stationData);
+            lvStation.setAdapter(stationAdapter);
+        }
+        catch (Exception e)
+        {
+            Log.v("TAG",e.getMessage());
+        }
     }
 
     @Override
@@ -62,43 +83,32 @@ public class CityActivity extends AppCompatActivity implements View.OnClickListe
     private void getCityStations()
     {
         APIService apiService = RetrofitManager.getRetrofit().create(APIService.class);
-        io.reactivex.Observable<CityModel> observable = apiService.getCity(CITY_ID,TOKEN).subscribeOn(Schedulers.io());
-                observable
+        apiService.getCity(CITY_ID,TOKEN)
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                        new Consumer<CityModel>() {
-                            @Override
-                            public void accept(CityModel model) {
-                                if (model != null) {
-                                    txtCityName.setText(model.getCity());
-                                    setListView(model);
-                                }
-                            }
-                        },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                Log.v("TAG",throwable.getMessage());
-                            }
-                        }
-                );
+                                new Consumer<CityModel>() {
+                                    @Override
+                                    public void accept(CityModel model) throws Exception {
+                                        txtCityName.setText(model.getCity());
+                                        setListView(model);
+                                    }
+                                },
+                                throwable -> Log.v("TAG", throwable.getMessage())
+                        );
 
     }
 
     private void setListView(CityModel model)
     {
-        String[] stationData = new String[]{};
         List<CityModel.StationsBean> stations = model.getStations();
-        if(stations!=null&&stations.size()>0)
-        {
-            for (CityModel.StationsBean station : stations) {
-                int i = 0;
-                stationData[i] = station.getStation_name();
-                i++;
+        stationData.clear();
+        if(stations!=null&&stations.size()>0) {
+            for(CityModel.StationsBean stationsBean:stations)
+            {
+                stationData.add(stationsBean.getStation_name());
             }
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.listview_citystation_item,stationData);
-        lvStation.setAdapter(adapter);
-
+        stationAdapter.notifyDataSetChanged();
     }
 }
